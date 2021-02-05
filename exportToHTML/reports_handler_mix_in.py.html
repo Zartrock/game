@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>reports_handler_mix_in.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #808080;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #cc7832;}
+.s3 { color: #629755; font-style: italic;}
+.s4 { color: #6a8759;}
+.s5 { color: #6897bb;}
+.ln { color: #606366; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+reports_handler_mix_in.py</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0"># Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html</span>
+<a name="l2"><span class="ln">2    </span></a><span class="s0"># For details: https://github.com/PyCQA/pylint/blob/master/COPYING</span>
+<a name="l3"><span class="ln">3    </span></a>
+<a name="l4"><span class="ln">4    </span></a><span class="s2">import </span><span class="s1">collections</span>
+<a name="l5"><span class="ln">5    </span></a>
+<a name="l6"><span class="ln">6    </span></a><span class="s2">from </span><span class="s1">pylint.exceptions </span><span class="s2">import </span><span class="s1">EmptyReportError</span>
+<a name="l7"><span class="ln">7    </span></a><span class="s2">from </span><span class="s1">pylint.reporters.ureports.nodes </span><span class="s2">import </span><span class="s1">Section</span>
+<a name="l8"><span class="ln">8    </span></a>
+<a name="l9"><span class="ln">9    </span></a>
+<a name="l10"><span class="ln">10   </span></a><span class="s2">class </span><span class="s1">ReportsHandlerMixIn:</span>
+<a name="l11"><span class="ln">11   </span></a>    <span class="s3">&quot;&quot;&quot;a mix-in class containing all the reports and stats manipulation 
+<a name="l12"><span class="ln">12   </span></a>    related methods for the main lint class 
+<a name="l13"><span class="ln">13   </span></a>    &quot;&quot;&quot;</span>
+<a name="l14"><span class="ln">14   </span></a>
+<a name="l15"><span class="ln">15   </span></a>    <span class="s2">def </span><span class="s1">__init__(self):</span>
+<a name="l16"><span class="ln">16   </span></a>        <span class="s1">self._reports = collections.defaultdict(list)</span>
+<a name="l17"><span class="ln">17   </span></a>        <span class="s1">self._reports_state = {}</span>
+<a name="l18"><span class="ln">18   </span></a>
+<a name="l19"><span class="ln">19   </span></a>    <span class="s2">def </span><span class="s1">report_order(self):</span>
+<a name="l20"><span class="ln">20   </span></a>        <span class="s3">&quot;&quot;&quot; Return a list of reports, sorted in the order 
+<a name="l21"><span class="ln">21   </span></a>        in which they must be called. 
+<a name="l22"><span class="ln">22   </span></a>        &quot;&quot;&quot;</span>
+<a name="l23"><span class="ln">23   </span></a>        <span class="s2">return </span><span class="s1">list(self._reports)</span>
+<a name="l24"><span class="ln">24   </span></a>
+<a name="l25"><span class="ln">25   </span></a>    <span class="s2">def </span><span class="s1">register_report(self</span><span class="s2">, </span><span class="s1">reportid</span><span class="s2">, </span><span class="s1">r_title</span><span class="s2">, </span><span class="s1">r_cb</span><span class="s2">, </span><span class="s1">checker):</span>
+<a name="l26"><span class="ln">26   </span></a>        <span class="s3">&quot;&quot;&quot;register a report 
+<a name="l27"><span class="ln">27   </span></a> 
+<a name="l28"><span class="ln">28   </span></a>        reportid is the unique identifier for the report 
+<a name="l29"><span class="ln">29   </span></a>        r_title the report's title 
+<a name="l30"><span class="ln">30   </span></a>        r_cb the method to call to make the report 
+<a name="l31"><span class="ln">31   </span></a>        checker is the checker defining the report 
+<a name="l32"><span class="ln">32   </span></a>        &quot;&quot;&quot;</span>
+<a name="l33"><span class="ln">33   </span></a>        <span class="s1">reportid = reportid.upper()</span>
+<a name="l34"><span class="ln">34   </span></a>        <span class="s1">self._reports[checker].append((reportid</span><span class="s2">, </span><span class="s1">r_title</span><span class="s2">, </span><span class="s1">r_cb))</span>
+<a name="l35"><span class="ln">35   </span></a>
+<a name="l36"><span class="ln">36   </span></a>    <span class="s2">def </span><span class="s1">enable_report(self</span><span class="s2">, </span><span class="s1">reportid):</span>
+<a name="l37"><span class="ln">37   </span></a>        <span class="s3">&quot;&quot;&quot;disable the report of the given id&quot;&quot;&quot;</span>
+<a name="l38"><span class="ln">38   </span></a>        <span class="s1">reportid = reportid.upper()</span>
+<a name="l39"><span class="ln">39   </span></a>        <span class="s1">self._reports_state[reportid] = </span><span class="s2">True</span>
+<a name="l40"><span class="ln">40   </span></a>
+<a name="l41"><span class="ln">41   </span></a>    <span class="s2">def </span><span class="s1">disable_report(self</span><span class="s2">, </span><span class="s1">reportid):</span>
+<a name="l42"><span class="ln">42   </span></a>        <span class="s3">&quot;&quot;&quot;disable the report of the given id&quot;&quot;&quot;</span>
+<a name="l43"><span class="ln">43   </span></a>        <span class="s1">reportid = reportid.upper()</span>
+<a name="l44"><span class="ln">44   </span></a>        <span class="s1">self._reports_state[reportid] = </span><span class="s2">False</span>
+<a name="l45"><span class="ln">45   </span></a>
+<a name="l46"><span class="ln">46   </span></a>    <span class="s2">def </span><span class="s1">report_is_enabled(self</span><span class="s2">, </span><span class="s1">reportid):</span>
+<a name="l47"><span class="ln">47   </span></a>        <span class="s3">&quot;&quot;&quot;return true if the report associated to the given identifier is 
+<a name="l48"><span class="ln">48   </span></a>        enabled 
+<a name="l49"><span class="ln">49   </span></a>        &quot;&quot;&quot;</span>
+<a name="l50"><span class="ln">50   </span></a>        <span class="s2">return </span><span class="s1">self._reports_state.get(reportid</span><span class="s2">, True</span><span class="s1">)</span>
+<a name="l51"><span class="ln">51   </span></a>
+<a name="l52"><span class="ln">52   </span></a>    <span class="s2">def </span><span class="s1">make_reports(self</span><span class="s2">, </span><span class="s1">stats</span><span class="s2">, </span><span class="s1">old_stats):</span>
+<a name="l53"><span class="ln">53   </span></a>        <span class="s3">&quot;&quot;&quot;render registered reports&quot;&quot;&quot;</span>
+<a name="l54"><span class="ln">54   </span></a>        <span class="s1">sect = Section(</span><span class="s4">&quot;Report&quot;</span><span class="s2">, </span><span class="s4">&quot;%s statements analysed.&quot; </span><span class="s1">% (self.stats[</span><span class="s4">&quot;statement&quot;</span><span class="s1">]))</span>
+<a name="l55"><span class="ln">55   </span></a>        <span class="s2">for </span><span class="s1">checker </span><span class="s2">in </span><span class="s1">self.report_order():</span>
+<a name="l56"><span class="ln">56   </span></a>            <span class="s2">for </span><span class="s1">reportid</span><span class="s2">, </span><span class="s1">r_title</span><span class="s2">, </span><span class="s1">r_cb </span><span class="s2">in </span><span class="s1">self._reports[checker]:</span>
+<a name="l57"><span class="ln">57   </span></a>                <span class="s2">if not </span><span class="s1">self.report_is_enabled(reportid):</span>
+<a name="l58"><span class="ln">58   </span></a>                    <span class="s2">continue</span>
+<a name="l59"><span class="ln">59   </span></a>                <span class="s1">report_sect = Section(r_title)</span>
+<a name="l60"><span class="ln">60   </span></a>                <span class="s2">try</span><span class="s1">:</span>
+<a name="l61"><span class="ln">61   </span></a>                    <span class="s1">r_cb(report_sect</span><span class="s2">, </span><span class="s1">stats</span><span class="s2">, </span><span class="s1">old_stats)</span>
+<a name="l62"><span class="ln">62   </span></a>                <span class="s2">except </span><span class="s1">EmptyReportError:</span>
+<a name="l63"><span class="ln">63   </span></a>                    <span class="s2">continue</span>
+<a name="l64"><span class="ln">64   </span></a>                <span class="s1">report_sect.report_id = reportid</span>
+<a name="l65"><span class="ln">65   </span></a>                <span class="s1">sect.append(report_sect)</span>
+<a name="l66"><span class="ln">66   </span></a>        <span class="s2">return </span><span class="s1">sect</span>
+<a name="l67"><span class="ln">67   </span></a>
+<a name="l68"><span class="ln">68   </span></a>    <span class="s2">def </span><span class="s1">add_stats(self</span><span class="s2">, </span><span class="s1">**kwargs):</span>
+<a name="l69"><span class="ln">69   </span></a>        <span class="s3">&quot;&quot;&quot;add some stats entries to the statistic dictionary 
+<a name="l70"><span class="ln">70   </span></a>        raise an AssertionError if there is a key conflict 
+<a name="l71"><span class="ln">71   </span></a>        &quot;&quot;&quot;</span>
+<a name="l72"><span class="ln">72   </span></a>        <span class="s2">for </span><span class="s1">key</span><span class="s2">, </span><span class="s1">value </span><span class="s2">in </span><span class="s1">kwargs.items():</span>
+<a name="l73"><span class="ln">73   </span></a>            <span class="s2">if </span><span class="s1">key[-</span><span class="s5">1</span><span class="s1">] == </span><span class="s4">&quot;_&quot;</span><span class="s1">:</span>
+<a name="l74"><span class="ln">74   </span></a>                <span class="s1">key = key[:-</span><span class="s5">1</span><span class="s1">]</span>
+<a name="l75"><span class="ln">75   </span></a>            <span class="s2">assert </span><span class="s1">key </span><span class="s2">not in </span><span class="s1">self.stats</span>
+<a name="l76"><span class="ln">76   </span></a>            <span class="s1">self.stats[key] = value</span>
+<a name="l77"><span class="ln">77   </span></a>        <span class="s2">return </span><span class="s1">self.stats</span>
+<a name="l78"><span class="ln">78   </span></a></pre>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>brain_nose.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #808080;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #629755; font-style: italic;}
+.s3 { color: #cc7832;}
+.s4 { color: #6a8759;}
+.s5 { color: #6897bb;}
+.ln { color: #606366; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+brain_nose.py</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0"># Copyright (c) 2015-2016, 2018 Claudiu Popa &lt;pcmanticore@gmail.com&gt;</span>
+<a name="l2"><span class="ln">2    </span></a><span class="s0"># Copyright (c) 2016 Ceridwen &lt;ceridwenv@gmail.com&gt;</span>
+<a name="l3"><span class="ln">3    </span></a>
+<a name="l4"><span class="ln">4    </span></a><span class="s0"># Licensed under the LGPL: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html</span>
+<a name="l5"><span class="ln">5    </span></a><span class="s0"># For details: https://github.com/PyCQA/astroid/blob/master/COPYING.LESSER</span>
+<a name="l6"><span class="ln">6    </span></a>
+<a name="l7"><span class="ln">7    </span></a>
+<a name="l8"><span class="ln">8    </span></a><span class="s2">&quot;&quot;&quot;Hooks for nose library.&quot;&quot;&quot;</span>
+<a name="l9"><span class="ln">9    </span></a>
+<a name="l10"><span class="ln">10   </span></a><span class="s3">import </span><span class="s1">re</span>
+<a name="l11"><span class="ln">11   </span></a><span class="s3">import </span><span class="s1">textwrap</span>
+<a name="l12"><span class="ln">12   </span></a>
+<a name="l13"><span class="ln">13   </span></a><span class="s3">import </span><span class="s1">astroid</span>
+<a name="l14"><span class="ln">14   </span></a><span class="s3">import </span><span class="s1">astroid.builder</span>
+<a name="l15"><span class="ln">15   </span></a>
+<a name="l16"><span class="ln">16   </span></a><span class="s1">_BUILDER = astroid.builder.AstroidBuilder(astroid.MANAGER)</span>
+<a name="l17"><span class="ln">17   </span></a>
+<a name="l18"><span class="ln">18   </span></a>
+<a name="l19"><span class="ln">19   </span></a><span class="s3">def </span><span class="s1">_pep8(name</span><span class="s3">, </span><span class="s1">caps=re.compile(</span><span class="s4">&quot;([A-Z])&quot;</span><span class="s1">)):</span>
+<a name="l20"><span class="ln">20   </span></a>    <span class="s3">return </span><span class="s1">caps.sub(</span><span class="s3">lambda </span><span class="s1">m: </span><span class="s4">&quot;_&quot; </span><span class="s1">+ m.groups()[</span><span class="s5">0</span><span class="s1">].lower()</span><span class="s3">, </span><span class="s1">name)</span>
+<a name="l21"><span class="ln">21   </span></a>
+<a name="l22"><span class="ln">22   </span></a>
+<a name="l23"><span class="ln">23   </span></a><span class="s3">def </span><span class="s1">_nose_tools_functions():</span>
+<a name="l24"><span class="ln">24   </span></a>    <span class="s2">&quot;&quot;&quot;Get an iterator of names and bound methods.&quot;&quot;&quot;</span>
+<a name="l25"><span class="ln">25   </span></a>    <span class="s1">module = _BUILDER.string_build(</span>
+<a name="l26"><span class="ln">26   </span></a>        <span class="s1">textwrap.dedent(</span>
+<a name="l27"><span class="ln">27   </span></a>            <span class="s4">&quot;&quot;&quot; 
+<a name="l28"><span class="ln">28   </span></a>    import unittest 
+<a name="l29"><span class="ln">29   </span></a> 
+<a name="l30"><span class="ln">30   </span></a>    class Test(unittest.TestCase): 
+<a name="l31"><span class="ln">31   </span></a>        pass 
+<a name="l32"><span class="ln">32   </span></a>    a = Test() 
+<a name="l33"><span class="ln">33   </span></a>    &quot;&quot;&quot;</span>
+<a name="l34"><span class="ln">34   </span></a>        <span class="s1">)</span>
+<a name="l35"><span class="ln">35   </span></a>    <span class="s1">)</span>
+<a name="l36"><span class="ln">36   </span></a>    <span class="s3">try</span><span class="s1">:</span>
+<a name="l37"><span class="ln">37   </span></a>        <span class="s1">case = next(module[</span><span class="s4">&quot;a&quot;</span><span class="s1">].infer())</span>
+<a name="l38"><span class="ln">38   </span></a>    <span class="s3">except </span><span class="s1">astroid.InferenceError:</span>
+<a name="l39"><span class="ln">39   </span></a>        <span class="s3">return</span>
+<a name="l40"><span class="ln">40   </span></a>    <span class="s3">for </span><span class="s1">method </span><span class="s3">in </span><span class="s1">case.methods():</span>
+<a name="l41"><span class="ln">41   </span></a>        <span class="s3">if </span><span class="s1">method.name.startswith(</span><span class="s4">&quot;assert&quot;</span><span class="s1">) </span><span class="s3">and </span><span class="s4">&quot;_&quot; </span><span class="s3">not in </span><span class="s1">method.name:</span>
+<a name="l42"><span class="ln">42   </span></a>            <span class="s1">pep8_name = _pep8(method.name)</span>
+<a name="l43"><span class="ln">43   </span></a>            <span class="s3">yield </span><span class="s1">pep8_name</span><span class="s3">, </span><span class="s1">astroid.BoundMethod(method</span><span class="s3">, </span><span class="s1">case)</span>
+<a name="l44"><span class="ln">44   </span></a>        <span class="s3">if </span><span class="s1">method.name == </span><span class="s4">&quot;assertEqual&quot;</span><span class="s1">:</span>
+<a name="l45"><span class="ln">45   </span></a>            <span class="s0"># nose also exports assert_equals.</span>
+<a name="l46"><span class="ln">46   </span></a>            <span class="s3">yield </span><span class="s4">&quot;assert_equals&quot;</span><span class="s3">, </span><span class="s1">astroid.BoundMethod(method</span><span class="s3">, </span><span class="s1">case)</span>
+<a name="l47"><span class="ln">47   </span></a>
+<a name="l48"><span class="ln">48   </span></a>
+<a name="l49"><span class="ln">49   </span></a><span class="s3">def </span><span class="s1">_nose_tools_transform(node):</span>
+<a name="l50"><span class="ln">50   </span></a>    <span class="s3">for </span><span class="s1">method_name</span><span class="s3">, </span><span class="s1">method </span><span class="s3">in </span><span class="s1">_nose_tools_functions():</span>
+<a name="l51"><span class="ln">51   </span></a>        <span class="s1">node.locals[method_name] = [method]</span>
+<a name="l52"><span class="ln">52   </span></a>
+<a name="l53"><span class="ln">53   </span></a>
+<a name="l54"><span class="ln">54   </span></a><span class="s3">def </span><span class="s1">_nose_tools_trivial_transform():</span>
+<a name="l55"><span class="ln">55   </span></a>    <span class="s2">&quot;&quot;&quot;Custom transform for the nose.tools module.&quot;&quot;&quot;</span>
+<a name="l56"><span class="ln">56   </span></a>    <span class="s1">stub = _BUILDER.string_build(</span><span class="s4">&quot;&quot;&quot;__all__ = []&quot;&quot;&quot;</span><span class="s1">)</span>
+<a name="l57"><span class="ln">57   </span></a>    <span class="s1">all_entries = [</span><span class="s4">&quot;ok_&quot;</span><span class="s3">, </span><span class="s4">&quot;eq_&quot;</span><span class="s1">]</span>
+<a name="l58"><span class="ln">58   </span></a>
+<a name="l59"><span class="ln">59   </span></a>    <span class="s3">for </span><span class="s1">pep8_name</span><span class="s3">, </span><span class="s1">method </span><span class="s3">in </span><span class="s1">_nose_tools_functions():</span>
+<a name="l60"><span class="ln">60   </span></a>        <span class="s1">all_entries.append(pep8_name)</span>
+<a name="l61"><span class="ln">61   </span></a>        <span class="s1">stub[pep8_name] = method</span>
+<a name="l62"><span class="ln">62   </span></a>
+<a name="l63"><span class="ln">63   </span></a>    <span class="s0"># Update the __all__ variable, since nose.tools</span>
+<a name="l64"><span class="ln">64   </span></a>    <span class="s0"># does this manually with .append.</span>
+<a name="l65"><span class="ln">65   </span></a>    <span class="s1">all_assign = stub[</span><span class="s4">&quot;__all__&quot;</span><span class="s1">].parent</span>
+<a name="l66"><span class="ln">66   </span></a>    <span class="s1">all_object = astroid.List(all_entries)</span>
+<a name="l67"><span class="ln">67   </span></a>    <span class="s1">all_object.parent = all_assign</span>
+<a name="l68"><span class="ln">68   </span></a>    <span class="s1">all_assign.value = all_object</span>
+<a name="l69"><span class="ln">69   </span></a>    <span class="s3">return </span><span class="s1">stub</span>
+<a name="l70"><span class="ln">70   </span></a>
+<a name="l71"><span class="ln">71   </span></a>
+<a name="l72"><span class="ln">72   </span></a><span class="s1">astroid.register_module_extender(</span>
+<a name="l73"><span class="ln">73   </span></a>    <span class="s1">astroid.MANAGER</span><span class="s3">, </span><span class="s4">&quot;nose.tools.trivial&quot;</span><span class="s3">, </span><span class="s1">_nose_tools_trivial_transform</span>
+<a name="l74"><span class="ln">74   </span></a><span class="s1">)</span>
+<a name="l75"><span class="ln">75   </span></a><span class="s1">astroid.MANAGER.register_transform(</span>
+<a name="l76"><span class="ln">76   </span></a>    <span class="s1">astroid.Module</span><span class="s3">, </span><span class="s1">_nose_tools_transform</span><span class="s3">, lambda </span><span class="s1">n: n.name == </span><span class="s4">&quot;nose.tools&quot;</span>
+<a name="l77"><span class="ln">77   </span></a><span class="s1">)</span>
+<a name="l78"><span class="ln">78   </span></a></pre>
+</body>
+</html>

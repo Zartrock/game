@@ -1,0 +1,200 @@
+<html>
+<head>
+<title>brain_curses.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #808080;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #cc7832;}
+.s3 { color: #6a8759;}
+.ln { color: #606366; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+brain_curses.py</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0"># Licensed under the LGPL: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html</span>
+<a name="l2"><span class="ln">2    </span></a><span class="s0"># For details: https://github.com/PyCQA/astroid/blob/master/COPYING.LESSER</span>
+<a name="l3"><span class="ln">3    </span></a><span class="s2">import </span><span class="s1">astroid</span>
+<a name="l4"><span class="ln">4    </span></a>
+<a name="l5"><span class="ln">5    </span></a>
+<a name="l6"><span class="ln">6    </span></a><span class="s2">def </span><span class="s1">_curses_transform():</span>
+<a name="l7"><span class="ln">7    </span></a>    <span class="s2">return </span><span class="s1">astroid.parse(</span>
+<a name="l8"><span class="ln">8    </span></a>        <span class="s3">&quot;&quot;&quot; 
+<a name="l9"><span class="ln">9    </span></a>    A_ALTCHARSET = 1 
+<a name="l10"><span class="ln">10   </span></a>    A_BLINK = 1 
+<a name="l11"><span class="ln">11   </span></a>    A_BOLD = 1 
+<a name="l12"><span class="ln">12   </span></a>    A_DIM = 1 
+<a name="l13"><span class="ln">13   </span></a>    A_INVIS = 1 
+<a name="l14"><span class="ln">14   </span></a>    A_ITALIC = 1 
+<a name="l15"><span class="ln">15   </span></a>    A_NORMAL = 1 
+<a name="l16"><span class="ln">16   </span></a>    A_PROTECT = 1 
+<a name="l17"><span class="ln">17   </span></a>    A_REVERSE = 1 
+<a name="l18"><span class="ln">18   </span></a>    A_STANDOUT = 1 
+<a name="l19"><span class="ln">19   </span></a>    A_UNDERLINE = 1 
+<a name="l20"><span class="ln">20   </span></a>    A_HORIZONTAL = 1 
+<a name="l21"><span class="ln">21   </span></a>    A_LEFT = 1 
+<a name="l22"><span class="ln">22   </span></a>    A_LOW = 1 
+<a name="l23"><span class="ln">23   </span></a>    A_RIGHT = 1 
+<a name="l24"><span class="ln">24   </span></a>    A_TOP = 1 
+<a name="l25"><span class="ln">25   </span></a>    A_VERTICAL = 1 
+<a name="l26"><span class="ln">26   </span></a>    A_CHARTEXT = 1 
+<a name="l27"><span class="ln">27   </span></a>    A_ATTRIBUTES = 1 
+<a name="l28"><span class="ln">28   </span></a>    A_CHARTEXT = 1 
+<a name="l29"><span class="ln">29   </span></a>    A_COLOR = 1 
+<a name="l30"><span class="ln">30   </span></a>    KEY_MIN = 1 
+<a name="l31"><span class="ln">31   </span></a>    KEY_BREAK = 1 
+<a name="l32"><span class="ln">32   </span></a>    KEY_DOWN = 1 
+<a name="l33"><span class="ln">33   </span></a>    KEY_UP = 1 
+<a name="l34"><span class="ln">34   </span></a>    KEY_LEFT = 1 
+<a name="l35"><span class="ln">35   </span></a>    KEY_RIGHT = 1 
+<a name="l36"><span class="ln">36   </span></a>    KEY_HOME = 1 
+<a name="l37"><span class="ln">37   </span></a>    KEY_BACKSPACE = 1 
+<a name="l38"><span class="ln">38   </span></a>    KEY_F0 = 1 
+<a name="l39"><span class="ln">39   </span></a>    KEY_Fn = 1 
+<a name="l40"><span class="ln">40   </span></a>    KEY_DL = 1 
+<a name="l41"><span class="ln">41   </span></a>    KEY_IL = 1 
+<a name="l42"><span class="ln">42   </span></a>    KEY_DC = 1 
+<a name="l43"><span class="ln">43   </span></a>    KEY_IC = 1 
+<a name="l44"><span class="ln">44   </span></a>    KEY_EIC = 1 
+<a name="l45"><span class="ln">45   </span></a>    KEY_CLEAR = 1 
+<a name="l46"><span class="ln">46   </span></a>    KEY_EOS = 1 
+<a name="l47"><span class="ln">47   </span></a>    KEY_EOL = 1 
+<a name="l48"><span class="ln">48   </span></a>    KEY_SF = 1 
+<a name="l49"><span class="ln">49   </span></a>    KEY_SR = 1 
+<a name="l50"><span class="ln">50   </span></a>    KEY_NPAGE = 1 
+<a name="l51"><span class="ln">51   </span></a>    KEY_PPAGE = 1 
+<a name="l52"><span class="ln">52   </span></a>    KEY_STAB = 1 
+<a name="l53"><span class="ln">53   </span></a>    KEY_CTAB = 1 
+<a name="l54"><span class="ln">54   </span></a>    KEY_CATAB = 1 
+<a name="l55"><span class="ln">55   </span></a>    KEY_ENTER = 1 
+<a name="l56"><span class="ln">56   </span></a>    KEY_SRESET = 1 
+<a name="l57"><span class="ln">57   </span></a>    KEY_RESET = 1 
+<a name="l58"><span class="ln">58   </span></a>    KEY_PRINT = 1 
+<a name="l59"><span class="ln">59   </span></a>    KEY_LL = 1 
+<a name="l60"><span class="ln">60   </span></a>    KEY_A1 = 1 
+<a name="l61"><span class="ln">61   </span></a>    KEY_A3 = 1 
+<a name="l62"><span class="ln">62   </span></a>    KEY_B2 = 1 
+<a name="l63"><span class="ln">63   </span></a>    KEY_C1 = 1 
+<a name="l64"><span class="ln">64   </span></a>    KEY_C3 = 1 
+<a name="l65"><span class="ln">65   </span></a>    KEY_BTAB = 1 
+<a name="l66"><span class="ln">66   </span></a>    KEY_BEG = 1 
+<a name="l67"><span class="ln">67   </span></a>    KEY_CANCEL = 1 
+<a name="l68"><span class="ln">68   </span></a>    KEY_CLOSE = 1 
+<a name="l69"><span class="ln">69   </span></a>    KEY_COMMAND = 1 
+<a name="l70"><span class="ln">70   </span></a>    KEY_COPY = 1 
+<a name="l71"><span class="ln">71   </span></a>    KEY_CREATE = 1 
+<a name="l72"><span class="ln">72   </span></a>    KEY_END = 1 
+<a name="l73"><span class="ln">73   </span></a>    KEY_EXIT = 1 
+<a name="l74"><span class="ln">74   </span></a>    KEY_FIND = 1 
+<a name="l75"><span class="ln">75   </span></a>    KEY_HELP = 1 
+<a name="l76"><span class="ln">76   </span></a>    KEY_MARK = 1 
+<a name="l77"><span class="ln">77   </span></a>    KEY_MESSAGE = 1 
+<a name="l78"><span class="ln">78   </span></a>    KEY_MOVE = 1 
+<a name="l79"><span class="ln">79   </span></a>    KEY_NEXT = 1 
+<a name="l80"><span class="ln">80   </span></a>    KEY_OPEN = 1 
+<a name="l81"><span class="ln">81   </span></a>    KEY_OPTIONS = 1 
+<a name="l82"><span class="ln">82   </span></a>    KEY_PREVIOUS = 1 
+<a name="l83"><span class="ln">83   </span></a>    KEY_REDO = 1 
+<a name="l84"><span class="ln">84   </span></a>    KEY_REFERENCE = 1 
+<a name="l85"><span class="ln">85   </span></a>    KEY_REFRESH = 1 
+<a name="l86"><span class="ln">86   </span></a>    KEY_REPLACE = 1 
+<a name="l87"><span class="ln">87   </span></a>    KEY_RESTART = 1 
+<a name="l88"><span class="ln">88   </span></a>    KEY_RESUME = 1 
+<a name="l89"><span class="ln">89   </span></a>    KEY_SAVE = 1 
+<a name="l90"><span class="ln">90   </span></a>    KEY_SBEG = 1 
+<a name="l91"><span class="ln">91   </span></a>    KEY_SCANCEL = 1 
+<a name="l92"><span class="ln">92   </span></a>    KEY_SCOMMAND = 1 
+<a name="l93"><span class="ln">93   </span></a>    KEY_SCOPY = 1 
+<a name="l94"><span class="ln">94   </span></a>    KEY_SCREATE = 1 
+<a name="l95"><span class="ln">95   </span></a>    KEY_SDC = 1 
+<a name="l96"><span class="ln">96   </span></a>    KEY_SDL = 1 
+<a name="l97"><span class="ln">97   </span></a>    KEY_SELECT = 1 
+<a name="l98"><span class="ln">98   </span></a>    KEY_SEND = 1 
+<a name="l99"><span class="ln">99   </span></a>    KEY_SEOL = 1 
+<a name="l100"><span class="ln">100  </span></a>    KEY_SEXIT = 1 
+<a name="l101"><span class="ln">101  </span></a>    KEY_SFIND = 1 
+<a name="l102"><span class="ln">102  </span></a>    KEY_SHELP = 1 
+<a name="l103"><span class="ln">103  </span></a>    KEY_SHOME = 1 
+<a name="l104"><span class="ln">104  </span></a>    KEY_SIC = 1 
+<a name="l105"><span class="ln">105  </span></a>    KEY_SLEFT = 1 
+<a name="l106"><span class="ln">106  </span></a>    KEY_SMESSAGE = 1 
+<a name="l107"><span class="ln">107  </span></a>    KEY_SMOVE = 1 
+<a name="l108"><span class="ln">108  </span></a>    KEY_SNEXT = 1 
+<a name="l109"><span class="ln">109  </span></a>    KEY_SOPTIONS = 1 
+<a name="l110"><span class="ln">110  </span></a>    KEY_SPREVIOUS = 1 
+<a name="l111"><span class="ln">111  </span></a>    KEY_SPRINT = 1 
+<a name="l112"><span class="ln">112  </span></a>    KEY_SREDO = 1 
+<a name="l113"><span class="ln">113  </span></a>    KEY_SREPLACE = 1 
+<a name="l114"><span class="ln">114  </span></a>    KEY_SRIGHT = 1 
+<a name="l115"><span class="ln">115  </span></a>    KEY_SRSUME = 1 
+<a name="l116"><span class="ln">116  </span></a>    KEY_SSAVE = 1 
+<a name="l117"><span class="ln">117  </span></a>    KEY_SSUSPEND = 1 
+<a name="l118"><span class="ln">118  </span></a>    KEY_SUNDO = 1 
+<a name="l119"><span class="ln">119  </span></a>    KEY_SUSPEND = 1 
+<a name="l120"><span class="ln">120  </span></a>    KEY_UNDO = 1 
+<a name="l121"><span class="ln">121  </span></a>    KEY_MOUSE = 1 
+<a name="l122"><span class="ln">122  </span></a>    KEY_RESIZE = 1 
+<a name="l123"><span class="ln">123  </span></a>    KEY_MAX = 1 
+<a name="l124"><span class="ln">124  </span></a>    ACS_BBSS = 1 
+<a name="l125"><span class="ln">125  </span></a>    ACS_BLOCK = 1 
+<a name="l126"><span class="ln">126  </span></a>    ACS_BOARD = 1 
+<a name="l127"><span class="ln">127  </span></a>    ACS_BSBS = 1 
+<a name="l128"><span class="ln">128  </span></a>    ACS_BSSB = 1 
+<a name="l129"><span class="ln">129  </span></a>    ACS_BSSS = 1 
+<a name="l130"><span class="ln">130  </span></a>    ACS_BTEE = 1 
+<a name="l131"><span class="ln">131  </span></a>    ACS_BULLET = 1 
+<a name="l132"><span class="ln">132  </span></a>    ACS_CKBOARD = 1 
+<a name="l133"><span class="ln">133  </span></a>    ACS_DARROW = 1 
+<a name="l134"><span class="ln">134  </span></a>    ACS_DEGREE = 1 
+<a name="l135"><span class="ln">135  </span></a>    ACS_DIAMOND = 1 
+<a name="l136"><span class="ln">136  </span></a>    ACS_GEQUAL = 1 
+<a name="l137"><span class="ln">137  </span></a>    ACS_HLINE = 1 
+<a name="l138"><span class="ln">138  </span></a>    ACS_LANTERN = 1 
+<a name="l139"><span class="ln">139  </span></a>    ACS_LARROW = 1 
+<a name="l140"><span class="ln">140  </span></a>    ACS_LEQUAL = 1 
+<a name="l141"><span class="ln">141  </span></a>    ACS_LLCORNER = 1 
+<a name="l142"><span class="ln">142  </span></a>    ACS_LRCORNER = 1 
+<a name="l143"><span class="ln">143  </span></a>    ACS_LTEE = 1 
+<a name="l144"><span class="ln">144  </span></a>    ACS_NEQUAL = 1 
+<a name="l145"><span class="ln">145  </span></a>    ACS_PI = 1 
+<a name="l146"><span class="ln">146  </span></a>    ACS_PLMINUS = 1 
+<a name="l147"><span class="ln">147  </span></a>    ACS_PLUS = 1 
+<a name="l148"><span class="ln">148  </span></a>    ACS_RARROW = 1 
+<a name="l149"><span class="ln">149  </span></a>    ACS_RTEE = 1 
+<a name="l150"><span class="ln">150  </span></a>    ACS_S1 = 1 
+<a name="l151"><span class="ln">151  </span></a>    ACS_S3 = 1 
+<a name="l152"><span class="ln">152  </span></a>    ACS_S7 = 1 
+<a name="l153"><span class="ln">153  </span></a>    ACS_S9 = 1 
+<a name="l154"><span class="ln">154  </span></a>    ACS_SBBS = 1 
+<a name="l155"><span class="ln">155  </span></a>    ACS_SBSB = 1 
+<a name="l156"><span class="ln">156  </span></a>    ACS_SBSS = 1 
+<a name="l157"><span class="ln">157  </span></a>    ACS_SSBB = 1 
+<a name="l158"><span class="ln">158  </span></a>    ACS_SSBS = 1 
+<a name="l159"><span class="ln">159  </span></a>    ACS_SSSB = 1 
+<a name="l160"><span class="ln">160  </span></a>    ACS_SSSS = 1 
+<a name="l161"><span class="ln">161  </span></a>    ACS_STERLING = 1 
+<a name="l162"><span class="ln">162  </span></a>    ACS_TTEE = 1 
+<a name="l163"><span class="ln">163  </span></a>    ACS_UARROW = 1 
+<a name="l164"><span class="ln">164  </span></a>    ACS_ULCORNER = 1 
+<a name="l165"><span class="ln">165  </span></a>    ACS_URCORNER = 1 
+<a name="l166"><span class="ln">166  </span></a>    ACS_VLINE = 1 
+<a name="l167"><span class="ln">167  </span></a>    COLOR_BLACK = 1 
+<a name="l168"><span class="ln">168  </span></a>    COLOR_BLUE = 1 
+<a name="l169"><span class="ln">169  </span></a>    COLOR_CYAN = 1 
+<a name="l170"><span class="ln">170  </span></a>    COLOR_GREEN = 1 
+<a name="l171"><span class="ln">171  </span></a>    COLOR_MAGENTA = 1 
+<a name="l172"><span class="ln">172  </span></a>    COLOR_RED = 1 
+<a name="l173"><span class="ln">173  </span></a>    COLOR_WHITE = 1 
+<a name="l174"><span class="ln">174  </span></a>    COLOR_YELLOW = 1 
+<a name="l175"><span class="ln">175  </span></a>        &quot;&quot;&quot;</span>
+<a name="l176"><span class="ln">176  </span></a>    <span class="s1">)</span>
+<a name="l177"><span class="ln">177  </span></a>
+<a name="l178"><span class="ln">178  </span></a>
+<a name="l179"><span class="ln">179  </span></a><span class="s1">astroid.register_module_extender(astroid.MANAGER</span><span class="s2">, </span><span class="s3">&quot;curses&quot;</span><span class="s2">, </span><span class="s1">_curses_transform)</span>
+<a name="l180"><span class="ln">180  </span></a></pre>
+</body>
+</html>

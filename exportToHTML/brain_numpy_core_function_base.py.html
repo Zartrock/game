@@ -1,0 +1,51 @@
+<html>
+<head>
+<title>brain_numpy_core_function_base.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #808080;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #629755; font-style: italic;}
+.s3 { color: #cc7832;}
+.s4 { color: #6a8759;}
+.ln { color: #606366; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+brain_numpy_core_function_base.py</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0"># Copyright (c) 2019 hippo91 &lt;guillaume.peillex@gmail.com&gt;</span>
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a><span class="s0"># Licensed under the LGPL: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html</span>
+<a name="l4"><span class="ln">4    </span></a><span class="s0"># For details: https://github.com/PyCQA/astroid/blob/master/COPYING.LESSER</span>
+<a name="l5"><span class="ln">5    </span></a>
+<a name="l6"><span class="ln">6    </span></a>
+<a name="l7"><span class="ln">7    </span></a><span class="s2">&quot;&quot;&quot;Astroid hooks for numpy.core.function_base module.&quot;&quot;&quot;</span>
+<a name="l8"><span class="ln">8    </span></a>
+<a name="l9"><span class="ln">9    </span></a><span class="s3">import </span><span class="s1">functools</span>
+<a name="l10"><span class="ln">10   </span></a><span class="s3">import </span><span class="s1">astroid</span>
+<a name="l11"><span class="ln">11   </span></a><span class="s3">from </span><span class="s1">brain_numpy_utils </span><span class="s3">import </span><span class="s1">looks_like_numpy_member</span><span class="s3">, </span><span class="s1">infer_numpy_member</span>
+<a name="l12"><span class="ln">12   </span></a>
+<a name="l13"><span class="ln">13   </span></a>
+<a name="l14"><span class="ln">14   </span></a><span class="s1">METHODS_TO_BE_INFERRED = {</span>
+<a name="l15"><span class="ln">15   </span></a>    <span class="s4">&quot;linspace&quot;</span><span class="s1">: </span><span class="s4">&quot;&quot;&quot;def linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None, axis=0): 
+<a name="l16"><span class="ln">16   </span></a>            return numpy.ndarray([0, 0])&quot;&quot;&quot;</span><span class="s3">,</span>
+<a name="l17"><span class="ln">17   </span></a>    <span class="s4">&quot;logspace&quot;</span><span class="s1">: </span><span class="s4">&quot;&quot;&quot;def logspace(start, stop, num=50, endpoint=True, base=10.0, dtype=None, axis=0): 
+<a name="l18"><span class="ln">18   </span></a>            return numpy.ndarray([0, 0])&quot;&quot;&quot;</span><span class="s3">,</span>
+<a name="l19"><span class="ln">19   </span></a>    <span class="s4">&quot;geomspace&quot;</span><span class="s1">: </span><span class="s4">&quot;&quot;&quot;def geomspace(start, stop, num=50, endpoint=True, dtype=None, axis=0): 
+<a name="l20"><span class="ln">20   </span></a>            return numpy.ndarray([0, 0])&quot;&quot;&quot;</span><span class="s3">,</span>
+<a name="l21"><span class="ln">21   </span></a><span class="s1">}</span>
+<a name="l22"><span class="ln">22   </span></a>
+<a name="l23"><span class="ln">23   </span></a><span class="s3">for </span><span class="s1">func_name</span><span class="s3">, </span><span class="s1">func_src </span><span class="s3">in </span><span class="s1">METHODS_TO_BE_INFERRED.items():</span>
+<a name="l24"><span class="ln">24   </span></a>    <span class="s1">inference_function = functools.partial(infer_numpy_member</span><span class="s3">, </span><span class="s1">func_src)</span>
+<a name="l25"><span class="ln">25   </span></a>    <span class="s1">astroid.MANAGER.register_transform(</span>
+<a name="l26"><span class="ln">26   </span></a>        <span class="s1">astroid.Attribute</span><span class="s3">,</span>
+<a name="l27"><span class="ln">27   </span></a>        <span class="s1">astroid.inference_tip(inference_function)</span><span class="s3">,</span>
+<a name="l28"><span class="ln">28   </span></a>        <span class="s1">functools.partial(looks_like_numpy_member</span><span class="s3">, </span><span class="s1">func_name)</span><span class="s3">,</span>
+<a name="l29"><span class="ln">29   </span></a>    <span class="s1">)</span>
+<a name="l30"><span class="ln">30   </span></a></pre>
+</body>
+</html>

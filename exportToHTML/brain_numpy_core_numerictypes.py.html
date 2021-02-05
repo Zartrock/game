@@ -1,0 +1,276 @@
+<html>
+<head>
+<title>brain_numpy_core_numerictypes.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #808080;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #629755; font-style: italic;}
+.s3 { color: #cc7832;}
+.s4 { color: #6a8759;}
+.ln { color: #606366; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+brain_numpy_core_numerictypes.py</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0"># Copyright (c) 2019-2020 hippo91 &lt;guillaume.peillex@gmail.com&gt;</span>
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a><span class="s0"># Licensed under the LGPL: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html</span>
+<a name="l4"><span class="ln">4    </span></a><span class="s0"># For details: https://github.com/PyCQA/astroid/blob/master/COPYING.LESSER</span>
+<a name="l5"><span class="ln">5    </span></a>
+<a name="l6"><span class="ln">6    </span></a><span class="s0"># TODO(hippo91) : correct the methods signature.</span>
+<a name="l7"><span class="ln">7    </span></a>
+<a name="l8"><span class="ln">8    </span></a><span class="s2">&quot;&quot;&quot;Astroid hooks for numpy.core.numerictypes module.&quot;&quot;&quot;</span>
+<a name="l9"><span class="ln">9    </span></a>
+<a name="l10"><span class="ln">10   </span></a><span class="s3">import </span><span class="s1">astroid</span>
+<a name="l11"><span class="ln">11   </span></a>
+<a name="l12"><span class="ln">12   </span></a>
+<a name="l13"><span class="ln">13   </span></a><span class="s3">def </span><span class="s1">numpy_core_numerictypes_transform():</span>
+<a name="l14"><span class="ln">14   </span></a>    <span class="s0"># TODO: Uniformize the generic API with the ndarray one.</span>
+<a name="l15"><span class="ln">15   </span></a>    <span class="s0">#       According to numpy doc the generic object should expose</span>
+<a name="l16"><span class="ln">16   </span></a>    <span class="s0">#       the same API than ndarray. This has been done here partially</span>
+<a name="l17"><span class="ln">17   </span></a>    <span class="s0">#       through the astype method.</span>
+<a name="l18"><span class="ln">18   </span></a>    <span class="s3">return </span><span class="s1">astroid.parse(</span>
+<a name="l19"><span class="ln">19   </span></a>        <span class="s4">&quot;&quot;&quot; 
+<a name="l20"><span class="ln">20   </span></a>    # different types defined in numerictypes.py 
+<a name="l21"><span class="ln">21   </span></a>    class generic(object): 
+<a name="l22"><span class="ln">22   </span></a>        def __init__(self, value): 
+<a name="l23"><span class="ln">23   </span></a>            self.T = None 
+<a name="l24"><span class="ln">24   </span></a>            self.base = None 
+<a name="l25"><span class="ln">25   </span></a>            self.data = None 
+<a name="l26"><span class="ln">26   </span></a>            self.dtype = None 
+<a name="l27"><span class="ln">27   </span></a>            self.flags = None 
+<a name="l28"><span class="ln">28   </span></a>            self.flat = None 
+<a name="l29"><span class="ln">29   </span></a>            self.imag = None 
+<a name="l30"><span class="ln">30   </span></a>            self.itemsize = None 
+<a name="l31"><span class="ln">31   </span></a>            self.nbytes = None 
+<a name="l32"><span class="ln">32   </span></a>            self.ndim = None 
+<a name="l33"><span class="ln">33   </span></a>            self.real = None 
+<a name="l34"><span class="ln">34   </span></a>            self.size = None 
+<a name="l35"><span class="ln">35   </span></a>            self.strides = None 
+<a name="l36"><span class="ln">36   </span></a> 
+<a name="l37"><span class="ln">37   </span></a>        def all(self): return uninferable 
+<a name="l38"><span class="ln">38   </span></a>        def any(self): return uninferable 
+<a name="l39"><span class="ln">39   </span></a>        def argmax(self): return uninferable 
+<a name="l40"><span class="ln">40   </span></a>        def argmin(self): return uninferable 
+<a name="l41"><span class="ln">41   </span></a>        def argsort(self): return uninferable 
+<a name="l42"><span class="ln">42   </span></a>        def astype(self, dtype, order='K', casting='unsafe', subok=True, copy=True): return np.ndarray([0, 0]) 
+<a name="l43"><span class="ln">43   </span></a>        def base(self): return uninferable 
+<a name="l44"><span class="ln">44   </span></a>        def byteswap(self): return uninferable 
+<a name="l45"><span class="ln">45   </span></a>        def choose(self): return uninferable 
+<a name="l46"><span class="ln">46   </span></a>        def clip(self): return uninferable 
+<a name="l47"><span class="ln">47   </span></a>        def compress(self): return uninferable 
+<a name="l48"><span class="ln">48   </span></a>        def conj(self): return uninferable 
+<a name="l49"><span class="ln">49   </span></a>        def conjugate(self): return uninferable 
+<a name="l50"><span class="ln">50   </span></a>        def copy(self): return uninferable 
+<a name="l51"><span class="ln">51   </span></a>        def cumprod(self): return uninferable 
+<a name="l52"><span class="ln">52   </span></a>        def cumsum(self): return uninferable 
+<a name="l53"><span class="ln">53   </span></a>        def data(self): return uninferable 
+<a name="l54"><span class="ln">54   </span></a>        def diagonal(self): return uninferable 
+<a name="l55"><span class="ln">55   </span></a>        def dtype(self): return uninferable 
+<a name="l56"><span class="ln">56   </span></a>        def dump(self): return uninferable 
+<a name="l57"><span class="ln">57   </span></a>        def dumps(self): return uninferable 
+<a name="l58"><span class="ln">58   </span></a>        def fill(self): return uninferable 
+<a name="l59"><span class="ln">59   </span></a>        def flags(self): return uninferable 
+<a name="l60"><span class="ln">60   </span></a>        def flat(self): return uninferable 
+<a name="l61"><span class="ln">61   </span></a>        def flatten(self): return uninferable 
+<a name="l62"><span class="ln">62   </span></a>        def getfield(self): return uninferable 
+<a name="l63"><span class="ln">63   </span></a>        def imag(self): return uninferable 
+<a name="l64"><span class="ln">64   </span></a>        def item(self): return uninferable 
+<a name="l65"><span class="ln">65   </span></a>        def itemset(self): return uninferable 
+<a name="l66"><span class="ln">66   </span></a>        def itemsize(self): return uninferable 
+<a name="l67"><span class="ln">67   </span></a>        def max(self): return uninferable 
+<a name="l68"><span class="ln">68   </span></a>        def mean(self): return uninferable 
+<a name="l69"><span class="ln">69   </span></a>        def min(self): return uninferable 
+<a name="l70"><span class="ln">70   </span></a>        def nbytes(self): return uninferable 
+<a name="l71"><span class="ln">71   </span></a>        def ndim(self): return uninferable 
+<a name="l72"><span class="ln">72   </span></a>        def newbyteorder(self): return uninferable 
+<a name="l73"><span class="ln">73   </span></a>        def nonzero(self): return uninferable 
+<a name="l74"><span class="ln">74   </span></a>        def prod(self): return uninferable 
+<a name="l75"><span class="ln">75   </span></a>        def ptp(self): return uninferable 
+<a name="l76"><span class="ln">76   </span></a>        def put(self): return uninferable 
+<a name="l77"><span class="ln">77   </span></a>        def ravel(self): return uninferable 
+<a name="l78"><span class="ln">78   </span></a>        def real(self): return uninferable 
+<a name="l79"><span class="ln">79   </span></a>        def repeat(self): return uninferable 
+<a name="l80"><span class="ln">80   </span></a>        def reshape(self): return uninferable 
+<a name="l81"><span class="ln">81   </span></a>        def resize(self): return uninferable 
+<a name="l82"><span class="ln">82   </span></a>        def round(self): return uninferable 
+<a name="l83"><span class="ln">83   </span></a>        def searchsorted(self): return uninferable 
+<a name="l84"><span class="ln">84   </span></a>        def setfield(self): return uninferable 
+<a name="l85"><span class="ln">85   </span></a>        def setflags(self): return uninferable 
+<a name="l86"><span class="ln">86   </span></a>        def shape(self): return uninferable 
+<a name="l87"><span class="ln">87   </span></a>        def size(self): return uninferable 
+<a name="l88"><span class="ln">88   </span></a>        def sort(self): return uninferable 
+<a name="l89"><span class="ln">89   </span></a>        def squeeze(self): return uninferable 
+<a name="l90"><span class="ln">90   </span></a>        def std(self): return uninferable 
+<a name="l91"><span class="ln">91   </span></a>        def strides(self): return uninferable 
+<a name="l92"><span class="ln">92   </span></a>        def sum(self): return uninferable 
+<a name="l93"><span class="ln">93   </span></a>        def swapaxes(self): return uninferable 
+<a name="l94"><span class="ln">94   </span></a>        def take(self): return uninferable 
+<a name="l95"><span class="ln">95   </span></a>        def tobytes(self): return uninferable 
+<a name="l96"><span class="ln">96   </span></a>        def tofile(self): return uninferable 
+<a name="l97"><span class="ln">97   </span></a>        def tolist(self): return uninferable 
+<a name="l98"><span class="ln">98   </span></a>        def tostring(self): return uninferable 
+<a name="l99"><span class="ln">99   </span></a>        def trace(self): return uninferable 
+<a name="l100"><span class="ln">100  </span></a>        def transpose(self): return uninferable 
+<a name="l101"><span class="ln">101  </span></a>        def var(self): return uninferable 
+<a name="l102"><span class="ln">102  </span></a>        def view(self): return uninferable 
+<a name="l103"><span class="ln">103  </span></a> 
+<a name="l104"><span class="ln">104  </span></a> 
+<a name="l105"><span class="ln">105  </span></a>    class dtype(object): 
+<a name="l106"><span class="ln">106  </span></a>        def __init__(self, obj, align=False, copy=False): 
+<a name="l107"><span class="ln">107  </span></a>            self.alignment = None 
+<a name="l108"><span class="ln">108  </span></a>            self.base = None 
+<a name="l109"><span class="ln">109  </span></a>            self.byteorder = None 
+<a name="l110"><span class="ln">110  </span></a>            self.char = None 
+<a name="l111"><span class="ln">111  </span></a>            self.descr = None 
+<a name="l112"><span class="ln">112  </span></a>            self.fields = None 
+<a name="l113"><span class="ln">113  </span></a>            self.flags = None 
+<a name="l114"><span class="ln">114  </span></a>            self.hasobject = None 
+<a name="l115"><span class="ln">115  </span></a>            self.isalignedstruct = None 
+<a name="l116"><span class="ln">116  </span></a>            self.isbuiltin = None 
+<a name="l117"><span class="ln">117  </span></a>            self.isnative = None 
+<a name="l118"><span class="ln">118  </span></a>            self.itemsize = None 
+<a name="l119"><span class="ln">119  </span></a>            self.kind = None 
+<a name="l120"><span class="ln">120  </span></a>            self.metadata = None 
+<a name="l121"><span class="ln">121  </span></a>            self.name = None 
+<a name="l122"><span class="ln">122  </span></a>            self.names = None 
+<a name="l123"><span class="ln">123  </span></a>            self.num = None 
+<a name="l124"><span class="ln">124  </span></a>            self.shape = None 
+<a name="l125"><span class="ln">125  </span></a>            self.str = None 
+<a name="l126"><span class="ln">126  </span></a>            self.subdtype = None 
+<a name="l127"><span class="ln">127  </span></a>            self.type = None 
+<a name="l128"><span class="ln">128  </span></a> 
+<a name="l129"><span class="ln">129  </span></a>        def newbyteorder(self, new_order='S'): return uninferable 
+<a name="l130"><span class="ln">130  </span></a>        def __neg__(self): return uninferable 
+<a name="l131"><span class="ln">131  </span></a> 
+<a name="l132"><span class="ln">132  </span></a>    class busdaycalendar(object): 
+<a name="l133"><span class="ln">133  </span></a>        def __init__(self, weekmask='1111100', holidays=None): 
+<a name="l134"><span class="ln">134  </span></a>            self.holidays = None 
+<a name="l135"><span class="ln">135  </span></a>            self.weekmask = None 
+<a name="l136"><span class="ln">136  </span></a> 
+<a name="l137"><span class="ln">137  </span></a>    class flexible(generic): pass 
+<a name="l138"><span class="ln">138  </span></a>    class bool_(generic): pass 
+<a name="l139"><span class="ln">139  </span></a>    class number(generic): 
+<a name="l140"><span class="ln">140  </span></a>        def __neg__(self): return uninferable 
+<a name="l141"><span class="ln">141  </span></a>    class datetime64(generic): 
+<a name="l142"><span class="ln">142  </span></a>        def __init__(self, nb, unit=None): pass 
+<a name="l143"><span class="ln">143  </span></a> 
+<a name="l144"><span class="ln">144  </span></a> 
+<a name="l145"><span class="ln">145  </span></a>    class void(flexible): 
+<a name="l146"><span class="ln">146  </span></a>        def __init__(self, *args, **kwargs): 
+<a name="l147"><span class="ln">147  </span></a>            self.base = None 
+<a name="l148"><span class="ln">148  </span></a>            self.dtype = None 
+<a name="l149"><span class="ln">149  </span></a>            self.flags = None 
+<a name="l150"><span class="ln">150  </span></a>        def getfield(self): return uninferable 
+<a name="l151"><span class="ln">151  </span></a>        def setfield(self): return uninferable 
+<a name="l152"><span class="ln">152  </span></a> 
+<a name="l153"><span class="ln">153  </span></a> 
+<a name="l154"><span class="ln">154  </span></a>    class character(flexible): pass 
+<a name="l155"><span class="ln">155  </span></a> 
+<a name="l156"><span class="ln">156  </span></a> 
+<a name="l157"><span class="ln">157  </span></a>    class integer(number): 
+<a name="l158"><span class="ln">158  </span></a>        def __init__(self, value): 
+<a name="l159"><span class="ln">159  </span></a>           self.denominator = None 
+<a name="l160"><span class="ln">160  </span></a>           self.numerator = None 
+<a name="l161"><span class="ln">161  </span></a> 
+<a name="l162"><span class="ln">162  </span></a> 
+<a name="l163"><span class="ln">163  </span></a>    class inexact(number): pass 
+<a name="l164"><span class="ln">164  </span></a> 
+<a name="l165"><span class="ln">165  </span></a> 
+<a name="l166"><span class="ln">166  </span></a>    class str_(str, character): 
+<a name="l167"><span class="ln">167  </span></a>        def maketrans(self, x, y=None, z=None): return uninferable 
+<a name="l168"><span class="ln">168  </span></a> 
+<a name="l169"><span class="ln">169  </span></a> 
+<a name="l170"><span class="ln">170  </span></a>    class bytes_(bytes, character): 
+<a name="l171"><span class="ln">171  </span></a>        def fromhex(self, string): return uninferable 
+<a name="l172"><span class="ln">172  </span></a>        def maketrans(self, frm, to): return uninferable 
+<a name="l173"><span class="ln">173  </span></a> 
+<a name="l174"><span class="ln">174  </span></a> 
+<a name="l175"><span class="ln">175  </span></a>    class signedinteger(integer): pass 
+<a name="l176"><span class="ln">176  </span></a> 
+<a name="l177"><span class="ln">177  </span></a> 
+<a name="l178"><span class="ln">178  </span></a>    class unsignedinteger(integer): pass 
+<a name="l179"><span class="ln">179  </span></a> 
+<a name="l180"><span class="ln">180  </span></a> 
+<a name="l181"><span class="ln">181  </span></a>    class complexfloating(inexact): pass 
+<a name="l182"><span class="ln">182  </span></a> 
+<a name="l183"><span class="ln">183  </span></a> 
+<a name="l184"><span class="ln">184  </span></a>    class floating(inexact): pass 
+<a name="l185"><span class="ln">185  </span></a> 
+<a name="l186"><span class="ln">186  </span></a> 
+<a name="l187"><span class="ln">187  </span></a>    class float64(floating, float): 
+<a name="l188"><span class="ln">188  </span></a>        def fromhex(self, string): return uninferable 
+<a name="l189"><span class="ln">189  </span></a> 
+<a name="l190"><span class="ln">190  </span></a> 
+<a name="l191"><span class="ln">191  </span></a>    class uint64(unsignedinteger): pass 
+<a name="l192"><span class="ln">192  </span></a>    class complex64(complexfloating): pass 
+<a name="l193"><span class="ln">193  </span></a>    class int16(signedinteger): pass 
+<a name="l194"><span class="ln">194  </span></a>    class float96(floating): pass 
+<a name="l195"><span class="ln">195  </span></a>    class int8(signedinteger): pass 
+<a name="l196"><span class="ln">196  </span></a>    class uint32(unsignedinteger): pass 
+<a name="l197"><span class="ln">197  </span></a>    class uint8(unsignedinteger): pass 
+<a name="l198"><span class="ln">198  </span></a>    class _typedict(dict): pass 
+<a name="l199"><span class="ln">199  </span></a>    class complex192(complexfloating): pass 
+<a name="l200"><span class="ln">200  </span></a>    class timedelta64(signedinteger): 
+<a name="l201"><span class="ln">201  </span></a>        def __init__(self, nb, unit=None): pass 
+<a name="l202"><span class="ln">202  </span></a>    class int32(signedinteger): pass 
+<a name="l203"><span class="ln">203  </span></a>    class uint16(unsignedinteger): pass 
+<a name="l204"><span class="ln">204  </span></a>    class float32(floating): pass 
+<a name="l205"><span class="ln">205  </span></a>    class complex128(complexfloating, complex): pass 
+<a name="l206"><span class="ln">206  </span></a>    class float16(floating): pass 
+<a name="l207"><span class="ln">207  </span></a>    class int64(signedinteger): pass 
+<a name="l208"><span class="ln">208  </span></a> 
+<a name="l209"><span class="ln">209  </span></a>    buffer_type = memoryview 
+<a name="l210"><span class="ln">210  </span></a>    bool8 = bool_ 
+<a name="l211"><span class="ln">211  </span></a>    byte = int8 
+<a name="l212"><span class="ln">212  </span></a>    bytes0 = bytes_ 
+<a name="l213"><span class="ln">213  </span></a>    cdouble = complex128 
+<a name="l214"><span class="ln">214  </span></a>    cfloat = complex128 
+<a name="l215"><span class="ln">215  </span></a>    clongdouble = complex192 
+<a name="l216"><span class="ln">216  </span></a>    clongfloat = complex192 
+<a name="l217"><span class="ln">217  </span></a>    complex_ = complex128 
+<a name="l218"><span class="ln">218  </span></a>    csingle = complex64 
+<a name="l219"><span class="ln">219  </span></a>    double = float64 
+<a name="l220"><span class="ln">220  </span></a>    float_ = float64 
+<a name="l221"><span class="ln">221  </span></a>    half = float16 
+<a name="l222"><span class="ln">222  </span></a>    int0 = int32 
+<a name="l223"><span class="ln">223  </span></a>    int_ = int32 
+<a name="l224"><span class="ln">224  </span></a>    intc = int32 
+<a name="l225"><span class="ln">225  </span></a>    intp = int32 
+<a name="l226"><span class="ln">226  </span></a>    long = int32 
+<a name="l227"><span class="ln">227  </span></a>    longcomplex = complex192 
+<a name="l228"><span class="ln">228  </span></a>    longdouble = float96 
+<a name="l229"><span class="ln">229  </span></a>    longfloat = float96 
+<a name="l230"><span class="ln">230  </span></a>    longlong = int64 
+<a name="l231"><span class="ln">231  </span></a>    object0 = object_ 
+<a name="l232"><span class="ln">232  </span></a>    object_ = object_ 
+<a name="l233"><span class="ln">233  </span></a>    short = int16 
+<a name="l234"><span class="ln">234  </span></a>    single = float32 
+<a name="l235"><span class="ln">235  </span></a>    singlecomplex = complex64 
+<a name="l236"><span class="ln">236  </span></a>    str0 = str_ 
+<a name="l237"><span class="ln">237  </span></a>    string_ = bytes_ 
+<a name="l238"><span class="ln">238  </span></a>    ubyte = uint8 
+<a name="l239"><span class="ln">239  </span></a>    uint = uint32 
+<a name="l240"><span class="ln">240  </span></a>    uint0 = uint32 
+<a name="l241"><span class="ln">241  </span></a>    uintc = uint32 
+<a name="l242"><span class="ln">242  </span></a>    uintp = uint32 
+<a name="l243"><span class="ln">243  </span></a>    ulonglong = uint64 
+<a name="l244"><span class="ln">244  </span></a>    unicode = str_ 
+<a name="l245"><span class="ln">245  </span></a>    unicode_ = str_ 
+<a name="l246"><span class="ln">246  </span></a>    ushort = uint16 
+<a name="l247"><span class="ln">247  </span></a>    void0 = void 
+<a name="l248"><span class="ln">248  </span></a>    &quot;&quot;&quot;</span>
+<a name="l249"><span class="ln">249  </span></a>    <span class="s1">)</span>
+<a name="l250"><span class="ln">250  </span></a>
+<a name="l251"><span class="ln">251  </span></a>
+<a name="l252"><span class="ln">252  </span></a><span class="s1">astroid.register_module_extender(</span>
+<a name="l253"><span class="ln">253  </span></a>    <span class="s1">astroid.MANAGER</span><span class="s3">, </span><span class="s4">&quot;numpy.core.numerictypes&quot;</span><span class="s3">, </span><span class="s1">numpy_core_numerictypes_transform</span>
+<a name="l254"><span class="ln">254  </span></a><span class="s1">)</span>
+<a name="l255"><span class="ln">255  </span></a></pre>
+</body>
+</html>

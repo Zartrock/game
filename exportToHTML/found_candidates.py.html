@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>found_candidates.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #629755; font-style: italic;}
+.s4 { color: #6a8759;}
+.s5 { color: #6897bb;}
+.ln { color: #606366; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+found_candidates.py</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">import </span><span class="s1">itertools</span>
+<a name="l2"><span class="ln">2    </span></a><span class="s0">import </span><span class="s1">operator</span>
+<a name="l3"><span class="ln">3    </span></a>
+<a name="l4"><span class="ln">4    </span></a><span class="s0">from </span><span class="s1">pip._vendor.six.moves </span><span class="s0">import </span><span class="s1">collections_abc  </span><span class="s2"># type: ignore</span>
+<a name="l5"><span class="ln">5    </span></a>
+<a name="l6"><span class="ln">6    </span></a><span class="s0">from </span><span class="s1">pip._internal.utils.compat </span><span class="s0">import </span><span class="s1">lru_cache</span>
+<a name="l7"><span class="ln">7    </span></a><span class="s0">from </span><span class="s1">pip._internal.utils.typing </span><span class="s0">import </span><span class="s1">MYPY_CHECK_RUNNING</span>
+<a name="l8"><span class="ln">8    </span></a>
+<a name="l9"><span class="ln">9    </span></a><span class="s0">if </span><span class="s1">MYPY_CHECK_RUNNING:</span>
+<a name="l10"><span class="ln">10   </span></a>    <span class="s0">from </span><span class="s1">typing </span><span class="s0">import </span><span class="s1">Callable</span><span class="s0">, </span><span class="s1">Iterator</span><span class="s0">, </span><span class="s1">Optional</span><span class="s0">, </span><span class="s1">Set</span>
+<a name="l11"><span class="ln">11   </span></a>
+<a name="l12"><span class="ln">12   </span></a>    <span class="s0">from </span><span class="s1">pip._vendor.packaging.version </span><span class="s0">import </span><span class="s1">_BaseVersion</span>
+<a name="l13"><span class="ln">13   </span></a>
+<a name="l14"><span class="ln">14   </span></a>    <span class="s0">from </span><span class="s1">.base </span><span class="s0">import </span><span class="s1">Candidate</span>
+<a name="l15"><span class="ln">15   </span></a>
+<a name="l16"><span class="ln">16   </span></a>
+<a name="l17"><span class="ln">17   </span></a><span class="s0">def </span><span class="s1">_deduplicated_by_version(candidates):</span>
+<a name="l18"><span class="ln">18   </span></a>    <span class="s2"># type: (Iterator[Candidate]) -&gt; Iterator[Candidate]</span>
+<a name="l19"><span class="ln">19   </span></a>    <span class="s1">returned = set()  </span><span class="s2"># type: Set[_BaseVersion]</span>
+<a name="l20"><span class="ln">20   </span></a>    <span class="s0">for </span><span class="s1">candidate </span><span class="s0">in </span><span class="s1">candidates:</span>
+<a name="l21"><span class="ln">21   </span></a>        <span class="s0">if </span><span class="s1">candidate.version </span><span class="s0">in </span><span class="s1">returned:</span>
+<a name="l22"><span class="ln">22   </span></a>            <span class="s0">continue</span>
+<a name="l23"><span class="ln">23   </span></a>        <span class="s1">returned.add(candidate.version)</span>
+<a name="l24"><span class="ln">24   </span></a>        <span class="s0">yield </span><span class="s1">candidate</span>
+<a name="l25"><span class="ln">25   </span></a>
+<a name="l26"><span class="ln">26   </span></a>
+<a name="l27"><span class="ln">27   </span></a><span class="s0">def </span><span class="s1">_insert_installed(installed</span><span class="s0">, </span><span class="s1">others):</span>
+<a name="l28"><span class="ln">28   </span></a>    <span class="s2"># type: (Candidate, Iterator[Candidate]) -&gt; Iterator[Candidate]</span>
+<a name="l29"><span class="ln">29   </span></a>    <span class="s3">&quot;&quot;&quot;Iterator for ``FoundCandidates``. 
+<a name="l30"><span class="ln">30   </span></a> 
+<a name="l31"><span class="ln">31   </span></a>    This iterator is used when the resolver prefers to upgrade an 
+<a name="l32"><span class="ln">32   </span></a>    already-installed package. Candidates from index are returned in their 
+<a name="l33"><span class="ln">33   </span></a>    normal ordering, except replaced when the version is already installed. 
+<a name="l34"><span class="ln">34   </span></a> 
+<a name="l35"><span class="ln">35   </span></a>    Since candidates from index are already sorted by reverse version order, 
+<a name="l36"><span class="ln">36   </span></a>    `sorted()` here would keep the ordering mostly intact, only shuffling the 
+<a name="l37"><span class="ln">37   </span></a>    already-installed candidate into the correct position. We put the already- 
+<a name="l38"><span class="ln">38   </span></a>    installed candidate in front of those from the index, so it's put in front 
+<a name="l39"><span class="ln">39   </span></a>    after sorting due to Python sorting's stableness guarentee. 
+<a name="l40"><span class="ln">40   </span></a>    &quot;&quot;&quot;</span>
+<a name="l41"><span class="ln">41   </span></a>    <span class="s1">candidates = sorted(</span>
+<a name="l42"><span class="ln">42   </span></a>        <span class="s1">itertools.chain([installed]</span><span class="s0">, </span><span class="s1">others)</span><span class="s0">,</span>
+<a name="l43"><span class="ln">43   </span></a>        <span class="s1">key=operator.attrgetter(</span><span class="s4">&quot;version&quot;</span><span class="s1">)</span><span class="s0">,</span>
+<a name="l44"><span class="ln">44   </span></a>        <span class="s1">reverse=</span><span class="s0">True,</span>
+<a name="l45"><span class="ln">45   </span></a>    <span class="s1">)</span>
+<a name="l46"><span class="ln">46   </span></a>    <span class="s0">return </span><span class="s1">iter(candidates)</span>
+<a name="l47"><span class="ln">47   </span></a>
+<a name="l48"><span class="ln">48   </span></a>
+<a name="l49"><span class="ln">49   </span></a><span class="s0">class </span><span class="s1">FoundCandidates(collections_abc.Sequence):</span>
+<a name="l50"><span class="ln">50   </span></a>    <span class="s3">&quot;&quot;&quot;A lazy sequence to provide candidates to the resolver. 
+<a name="l51"><span class="ln">51   </span></a> 
+<a name="l52"><span class="ln">52   </span></a>    The intended usage is to return this from `find_matches()` so the resolver 
+<a name="l53"><span class="ln">53   </span></a>    can iterate through the sequence multiple times, but only access the index 
+<a name="l54"><span class="ln">54   </span></a>    page when remote packages are actually needed. This improve performances 
+<a name="l55"><span class="ln">55   </span></a>    when suitable candidates are already installed on disk. 
+<a name="l56"><span class="ln">56   </span></a>    &quot;&quot;&quot;</span>
+<a name="l57"><span class="ln">57   </span></a>    <span class="s0">def </span><span class="s1">__init__(</span>
+<a name="l58"><span class="ln">58   </span></a>        <span class="s1">self</span><span class="s0">,</span>
+<a name="l59"><span class="ln">59   </span></a>        <span class="s1">get_others</span><span class="s0">,  </span><span class="s2"># type: Callable[[], Iterator[Candidate]]</span>
+<a name="l60"><span class="ln">60   </span></a>        <span class="s1">installed</span><span class="s0">,  </span><span class="s2"># type: Optional[Candidate]</span>
+<a name="l61"><span class="ln">61   </span></a>        <span class="s1">prefers_installed</span><span class="s0">,  </span><span class="s2"># type: bool</span>
+<a name="l62"><span class="ln">62   </span></a>    <span class="s1">):</span>
+<a name="l63"><span class="ln">63   </span></a>        <span class="s1">self._get_others = get_others</span>
+<a name="l64"><span class="ln">64   </span></a>        <span class="s1">self._installed = installed</span>
+<a name="l65"><span class="ln">65   </span></a>        <span class="s1">self._prefers_installed = prefers_installed</span>
+<a name="l66"><span class="ln">66   </span></a>
+<a name="l67"><span class="ln">67   </span></a>    <span class="s0">def </span><span class="s1">__getitem__(self</span><span class="s0">, </span><span class="s1">index):</span>
+<a name="l68"><span class="ln">68   </span></a>        <span class="s2"># type: (int) -&gt; Candidate</span>
+<a name="l69"><span class="ln">69   </span></a>        <span class="s2"># Implemented to satisfy the ABC check. This is not needed by the</span>
+<a name="l70"><span class="ln">70   </span></a>        <span class="s2"># resolver, and should not be used by the provider either (for</span>
+<a name="l71"><span class="ln">71   </span></a>        <span class="s2"># performance reasons).</span>
+<a name="l72"><span class="ln">72   </span></a>        <span class="s0">raise </span><span class="s1">NotImplementedError(</span><span class="s4">&quot;don't do this&quot;</span><span class="s1">)</span>
+<a name="l73"><span class="ln">73   </span></a>
+<a name="l74"><span class="ln">74   </span></a>    <span class="s0">def </span><span class="s1">__iter__(self):</span>
+<a name="l75"><span class="ln">75   </span></a>        <span class="s2"># type: () -&gt; Iterator[Candidate]</span>
+<a name="l76"><span class="ln">76   </span></a>        <span class="s0">if not </span><span class="s1">self._installed:</span>
+<a name="l77"><span class="ln">77   </span></a>            <span class="s1">candidates = self._get_others()</span>
+<a name="l78"><span class="ln">78   </span></a>        <span class="s0">elif </span><span class="s1">self._prefers_installed:</span>
+<a name="l79"><span class="ln">79   </span></a>            <span class="s1">candidates = itertools.chain([self._installed]</span><span class="s0">, </span><span class="s1">self._get_others())</span>
+<a name="l80"><span class="ln">80   </span></a>        <span class="s0">else</span><span class="s1">:</span>
+<a name="l81"><span class="ln">81   </span></a>            <span class="s1">candidates = _insert_installed(self._installed</span><span class="s0">, </span><span class="s1">self._get_others())</span>
+<a name="l82"><span class="ln">82   </span></a>        <span class="s0">return </span><span class="s1">_deduplicated_by_version(candidates)</span>
+<a name="l83"><span class="ln">83   </span></a>
+<a name="l84"><span class="ln">84   </span></a>    <span class="s0">def </span><span class="s1">__len__(self):</span>
+<a name="l85"><span class="ln">85   </span></a>        <span class="s2"># type: () -&gt; int</span>
+<a name="l86"><span class="ln">86   </span></a>        <span class="s2"># Implemented to satisfy the ABC check. This is not needed by the</span>
+<a name="l87"><span class="ln">87   </span></a>        <span class="s2"># resolver, and should not be used by the provider either (for</span>
+<a name="l88"><span class="ln">88   </span></a>        <span class="s2"># performance reasons).</span>
+<a name="l89"><span class="ln">89   </span></a>        <span class="s0">raise </span><span class="s1">NotImplementedError(</span><span class="s4">&quot;don't do this&quot;</span><span class="s1">)</span>
+<a name="l90"><span class="ln">90   </span></a>
+<a name="l91"><span class="ln">91   </span></a>    <span class="s1">@lru_cache(maxsize=</span><span class="s5">1</span><span class="s1">)</span>
+<a name="l92"><span class="ln">92   </span></a>    <span class="s0">def </span><span class="s1">__bool__(self):</span>
+<a name="l93"><span class="ln">93   </span></a>        <span class="s2"># type: () -&gt; bool</span>
+<a name="l94"><span class="ln">94   </span></a>        <span class="s0">if </span><span class="s1">self._prefers_installed </span><span class="s0">and </span><span class="s1">self._installed:</span>
+<a name="l95"><span class="ln">95   </span></a>            <span class="s0">return True</span>
+<a name="l96"><span class="ln">96   </span></a>        <span class="s0">return </span><span class="s1">any(self)</span>
+<a name="l97"><span class="ln">97   </span></a>
+<a name="l98"><span class="ln">98   </span></a>    <span class="s1">__nonzero__ = __bool__  </span><span class="s2"># XXX: Python 2.</span>
+<a name="l99"><span class="ln">99   </span></a></pre>
+</body>
+</html>
